@@ -2,7 +2,7 @@ import {React,useContext} from "react";
 import SingleChat from "./SingleChat";
 import { AuthContext } from "../context/context";
 
-// const ChatContainer = ({ fetchAgain, setFetchAgain }) => {
+
 const ChatContainer = ({  fetchAgain, setFetchAgain }) => {
   const { selectedChat } = useContext(AuthContext);
 

@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import suprsend from "@suprsend/web-sdk";
 import { AuthContext } from "../context/context"; // Add this
 
 const Login = () => {
@@ -35,7 +36,7 @@ const Login = () => {
       });
 
       localStorage.setItem("user", JSON.stringify(data));
-      
+      suprsend.identify(email);
       setTimeout(() => {
         navigate("/");
         

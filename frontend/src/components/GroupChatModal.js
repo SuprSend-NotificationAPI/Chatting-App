@@ -111,6 +111,7 @@ const GroupChatModal = ({ children }) => {
               justifyContent: "center",
               flexDirection: "column",
               padding: "10px",
+              overflowY:'scroll'
             }}
           >
             <input

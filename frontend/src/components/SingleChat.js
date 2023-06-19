@@ -9,6 +9,7 @@ import io from "socket.io-client";
 import emojiIcon from "./smileyEmoji.svg";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
+import suprsend from "@suprsend/web-sdk";
 
 let socket, selectedChatCompare;
 
@@ -103,6 +104,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           setNotification([newMessageReceived, ...notification]);
           setFetchAgain(!fetchAgain);
         }
+        suprsend.track("NEW_MSG");
       } else {
         setMessages([...messages, newMessageReceived]);
       }
@@ -210,7 +212,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 // border:'2px solid black',
               }}
             >
-              {isTyping&&selectedChat.isGroupChat ? (<div>{getSender(user,selectedChat.users)} is typing ...</div> ): isTyping?(<div>Typing ...</div>): <></>}
+              {isTyping && selectedChat.isGroupChat ? (
+                <div>{getSender(user, selectedChat.users)} is typing ...</div>
+              ) : isTyping ? (
+                <div>Typing ...</div>
+              ) : (
+                <></>
+              )}
               <div
                 style={{
                   width: "62%",
@@ -232,7 +240,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                   onClick={() => setShowEmojiBox(!showEmojiBox)}
                 />
                 {showEmojiBox && (
-                  <div style={{position:'absolute',left:'0',bottom:'45px', zIndex:'1'}}>
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: "0",
+                      bottom: "45px",
+                      zIndex: "1",
+                    }}
+                  >
                     <Picker
                       data={data}
                       onEmojiSelect={(emoji) =>

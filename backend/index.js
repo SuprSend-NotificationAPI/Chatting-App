@@ -10,9 +10,18 @@ import authRoute from "./routes/auth.js";
 import chatRoute from "./routes/chat.js";
 import messageRoute from "./routes/message.js";
 import authenticateUser from "./middleware/auth.js";
+// import suprsend from "@suprsend/web-sdk";
 
 dotenv.config();
 const PORT = process.env.PORT || 4000;
+
+
+// suprsend.init(process.env.WORKSPACE_KEY, process.env.WORKSPACE_SECRET, {
+//   vapid_key: process.env.VAPID_KEY
+// });
+
+// suprsend.web_push.register_push();
+// suprsend.web_push.notification_permission();
 
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
@@ -32,8 +41,7 @@ app.get("/", (req, res) => {
 
 app.use("/auth", authRoute);
 app.use("/chat", authenticateUser, chatRoute);
-// app.use("/chat", chatRoute);
-// app.use("/message", messageRoute);
+
 app.use("/message", authenticateUser, messageRoute);
 
 const io = new Server(server, {
@@ -44,16 +52,15 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log("Socket connected "+ socket.id)
+  console.log("Socket connected " + socket.id);
   socket.on("setup", (userData) => {
     socket.join(userData._id);
-    console.log(userData._id + " connected")
+    console.log(userData._id + " connected");
     socket.emit("connected");
   });
-  
 
   socket.on("join-chat", (room) => {
-    console.log(room+" joined")
+    console.log(room + " joined");
     socket.join(room);
   });
 
@@ -67,13 +74,13 @@ io.on("connection", (socket) => {
 
     chat.users.forEach((user) => {
       if (user._id === newMessageReceived.sender._id) return;
-console.log("Hey got a message " + newMessageReceived)
+      console.log("Hey got a message " + newMessageReceived);
       socket.in(user._id).emit("message-received", newMessageReceived);
     });
   });
 
   socket.off("setup", () => {
-    console.log("Socket disconnected")
+    console.log("Socket disconnected");
     socket.leave(userData._id);
   });
 });

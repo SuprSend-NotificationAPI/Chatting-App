@@ -2,9 +2,8 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-import UserListItem from "./UserListItem";
 import { AuthContext } from "../context/context";
-import { getSender } from "../config/chat";
+
 
 const SideBar = () => {
   const [search, setSearch] = useState("");
@@ -17,8 +16,6 @@ const SideBar = () => {
   const {
     setSelectedChat,
     user,
-    notification,
-    setNotification,
     chats,
     setChats,
   } = useContext(AuthContext);
@@ -106,7 +103,6 @@ const SideBar = () => {
         </button>
         <h2>Chat app</h2>
         <div>
-          {/* <button onClick={() => setOpen(true)}>Notification</button> */}
           <button
             onClick={logoutHandler}
             style={{

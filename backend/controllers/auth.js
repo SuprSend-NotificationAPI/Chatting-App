@@ -1,12 +1,7 @@
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
 import bcrypt from "bcryptjs";
-
-// import {
-//   BadRequestError,
-//   NotFoundError,
-//   UnAuthenticatedError,
-// } from "../errors/index.js";
+import suprsend from "@suprsend/web-sdk";
 
 const register = async (req, res) => {
   const { name, email, password } = req.body;
@@ -77,6 +72,10 @@ const login = async (req, res) => {
       expiresIn: process.env.JWT_LIFETIME,
     }
   );
+
+  suprsend.identify(email);
+
+  
 
   res.status(200).json({
     success: true,

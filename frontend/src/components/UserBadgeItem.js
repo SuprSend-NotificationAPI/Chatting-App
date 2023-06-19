@@ -1,29 +1,4 @@
-// const UserBadgeItem = ({ user, handleFunction, admin }) => {
-//     return (
-//       <div
-//         style={{
-//           padding: '10px',
-//           borderRadius: '5px',
-//           margin: '5px',
-//           marginBottom: '10px',
-//           backgroundColor: 'purple',
-//           color: 'white',
-//           fontSize: '12px',
-//           cursor: 'pointer',
-//           display: 'inline-block'
-//         }}
-//         onClick={handleFunction}
-//       >
-//         {user.username}
-//         {admin === user._id && <span> (Admin)</span>}
-//         <span style={{paddingLeft: '5px'}}>X</span>
-//       </div>
-//     );
-//   };
-  
-//   export default UserBadgeItem;
-  
-const UserBadgeItem = ({ user, handleFunction, admin }) => {
+ const UserBadgeItem = ({ user, handleFunction, admin }) => {
     return (
       <span
         style={{

@@ -7,7 +7,6 @@ import { toast } from "react-toastify";
 
 const MyChats = ({ fetchAgain }) => {
   const [loggedUser, setLoggedUser] = useState();
-  // const { user, setUser, chats, setChats } = useContext(AuthContext);
   const { user, chats, setChats, selectedChat, setSelectedChat } =
     useContext(AuthContext);
 
@@ -76,8 +75,6 @@ const MyChats = ({ fetchAgain }) => {
           padding: "3px",
         }}
       >
-        {/* <Stack overflowY="scroll">
-            </Stack> */}
         {chats ? (
           chats.map((chat) => (
             <div
