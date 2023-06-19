@@ -9,6 +9,7 @@ import io from "socket.io-client";
 import emojiIcon from "./smileyEmoji.svg";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
+import suprsend from "@suprsend/web-sdk";
 
 let socket, selectedChatCompare;
 
@@ -51,7 +52,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   };
 
   const sendMessage = async (e) => {
-    if (e.key === "Enter" && newMessage) {
+    if (e.key === "Enter"&& newMessage) {
       socket.emit("stop-typing", selectedChat._id);
       try {
         const { data } = await axios.post(
@@ -69,6 +70,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         );
 
         setNewMessage("");
+        setShowEmojiBox(false);
         socket.emit("new-message", data);
         setMessages([...messages, data]);
       } catch (error) {
@@ -103,6 +105,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           setNotification([newMessageReceived, ...notification]);
           setFetchAgain(!fetchAgain);
         }
+        suprsend.track("NEW_MSG");
       } else {
         setMessages([...messages, newMessageReceived]);
       }
@@ -145,8 +148,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             }}
           >
             <button
-              // className="btn"
-              onClick={() => setSelectedChat("")}
+              onClick={() => setSelectedChat(undefined)}
               style={{
                 backgroundColor: "#007bff",
                 color: "#fff",
@@ -197,7 +199,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 Loading...
               </div>
             ) : (
-              <div className="message">
+              <div
+                className="message"
+                style={{ maxHeight: "90%", overflowY: "auto" }}
+              >
                 <ScrollableChat messages={messages} />
               </div>
             )}
@@ -207,16 +212,25 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 marginTop: "10px",
                 display: "flex",
                 flexDirection: "column",
-                // border:'2px solid black',
               }}
             >
-              {isTyping&&selectedChat.isGroupChat ? (<div>{getSender(user,selectedChat.users)} is typing ...</div> ): isTyping?(<div>Typing ...</div>): <></>}
+              {isTyping && selectedChat.isGroupChat ? (
+                <div>{getSender(user, selectedChat.users)} is typing ...</div>
+              ) : isTyping ? (
+                <div>Typing ...</div>
+              ) : (
+                <></>
+              )}
               <div
                 style={{
-                  width: "62%",
+                  width: "63%",
+                  margin:'auto',
                   position: "fixed",
                   bottom: "30px",
-                  border: "1px solid grey",
+                  border: "1px solid white",
+                  border:'none',
+                  backgroundColor:'white',
+                  borderRadius:'10px',
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -232,7 +246,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                   onClick={() => setShowEmojiBox(!showEmojiBox)}
                 />
                 {showEmojiBox && (
-                  <div style={{position:'absolute',left:'0',bottom:'45px', zIndex:'1'}}>
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: "0",
+                      bottom: "45px",
+                      zIndex: "1",
+                    }}
+                  >
                     <Picker
                       data={data}
                       onEmojiSelect={(emoji) =>
@@ -243,11 +264,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 )}
                 <input
                   style={{
-                    // position:'fixed',
-                    // bottom:'30px',
-                    // right:'30px',
+                  
                     width: "95%",
-                    background: "#E0E0E0",
+                    backgroundColor:'white',
                     border: "none",
                     borderRadius: "5px",
                     outline: "none",
@@ -259,6 +278,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                   onKeyDown={sendMessage}
                   onChange={typingHandler}
                 />
+               
               </div>
             </div>
           </div>
